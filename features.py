@@ -16,6 +16,17 @@ it is still publicly accessible).
 
 import numpy as np
 
+def extractColumn(column,window):
+    return window[:column]
+
+def compute_crossing(crossingValue,valueArray):
+    crossingCounter = 0
+    for i in range(len(valueArray)-1):
+        if((valueArray[i]>crossingValue && valueArray[i+1]<crossingValue)
+        || (valueArray[i]<crossingValue && valueArray[i+1]>crossingValue)):
+            crossingCounter += 1
+    return crossingCounter
+
 def _compute_mean_features(window):
     """
     Computes the mean x, y and z acceleration over the given window.
@@ -33,6 +44,25 @@ def _compute_max_features(window):
 
 def _compute_median_features(window):
     return np.median(window,axis=0)
+
+def _compute_zero_crossing_features(window):
+    xArray = extractColumn(0,window)
+    yArray = extractColumn(1,window)
+    zArray = extractColumn(2,window)
+    xCrossingRate = compute_crossing(0,xArray)
+    yCrossingRate = compute_crossing(0,yArray)
+    zCrossingRate = compute_crossing(0,zArray)
+    return np.array([xCrossingRate,yCrossingRate,zCrossingRate])
+
+def _compute_mean_crossing_features(window):
+    meanArray = _compute_mean_features(window)
+    xArray = extractColumn(0,window)
+    yArray = extractColumn(1,window)
+    zArray = extractColumn(2,window)
+    xCrossingRate = compute_crossing(meanArray[0],xArray)
+    yCrossingRate = compute_crossing(meanArray[1],yArray)
+    zCrossingRate = compute_crossing(meanArray[2],zArray)
+    return np.array([xCrossingRate,yCrossingRate,zCrossingRate])
 
 def extract_features(window):
     """
@@ -52,5 +82,7 @@ def extract_features(window):
     x = np.append(x,_compute_min_features(window))
     x = np.append(x,_compute_max_features(window))
     x = np.append(x,_compute_median_features(window))
+    x = np.append(x,_compute_zero_crossing_features(window))
+    x = np.append(x,_compute_mean_crossing_features(window))
 
     return x
