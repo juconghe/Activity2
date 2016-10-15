@@ -80,10 +80,16 @@ n_samples = 1000
 time_elapsed_seconds = (data[n_samples,0] - data[0,0]) / 1000
 sampling_rate = n_samples / time_elapsed_seconds
 
-feature_names = ["mean X", "mean Y", "mean Z","Variance X","Variance Y", "Variance Z",
-                 "minX","minY","minZ","maxX","maxY","maxZ","medianX","medianY","medianZ",
-                 "zeroX","zeroY","zeroZ","meanCX","meanCY","meanCZ","FFTX","FFTY",
-                 "FFTZ","magnitude"]
+feature_names = ["mean X", "mean Y", "mean Z",
+                 "Variance X","Variance Y", "Variance Z",
+                 "minX","minY","minZ",
+                 "maxX","maxY","maxZ",
+                 "medianX","medianY","medianZ",
+                 "zeroX","zeroY","zeroZ",
+                 "meanCX","meanCY","meanCZ",
+                 "FFTX","FFTY","FFTZ",
+                 "magnitude","entropy","PeakX",
+                 "PeakY","PeakZ"]
 class_names = ["Stationary", "Walking"]
 
 print("Extracting features and labels for window size {} and step size {}...".format(window_size, step_size))
@@ -118,11 +124,13 @@ sys.stdout.flush()
 # We plotted the mean X acceleration against the mean Y acceleration.
 # It should be clear from the plot that these two features are alone very uninformative.
 print("Plotting data points...")
+lenghtArray = range(len(feature_names))
+mapDic = {feature_names[i]:i for i in lenghtArray}
 sys.stdout.flush()
 plt.figure()
 formats = ['bo', 'go']
 for i in range(0,len(y),10): # only plot 1/10th of the points, it's a lot of data!
-    plt.plot(X[i,0], X[i,4], formats[int(y[i])])
+    plt.plot(X[i,mapDic["Variance Y"]], X[i,mapDic["magnitude"]], formats[int(y[i])])
 
 plt.show()
 
@@ -137,7 +145,11 @@ n_classes = len(class_names)
 
 # TODO: Train and evaluate your decision tree classifier over 10-fold CV.
 # Report average accuracy, precision and recall metrics.
-
+tree  =   DecisionTreeClassifier ( criterion = "entropy" ,  max_depth = 3)
+tree.fit(X,y)
+y_pred = tree.predict(X)
+cof = confusion_matrix(X,y_pred)
+print(conf)
 cv = cross_validation.KFold(n, n_folds=10, shuffle=False, random_state=None)
 
 for i, (train_indexes, test_indexes) in enumerate(cv):

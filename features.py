@@ -15,7 +15,7 @@ it is still publicly accessible).
 """
 
 import numpy as np
-
+import math
 def compute_crossing(window):
     list1 = np.sign(window[1:])
     list2 = np.sign(window[:-1])
@@ -74,8 +74,33 @@ def _compute_FFT_features(window):
     return np.array([[dominantX],[dominantY],[dominantZ]])
 
 def _compute_entropy(window):
-    resultArray = np.histogram(window)
-    print resultArray[0].shape
+    firstArray = (np.histogram(window)[0]).astype(float)
+    filterArray = [result for result in firstArray if result > 0]
+    logArray = [-(value)*math.log(value) for value in filterArray]
+    return np.sum(logArray)
+
+def compute_peak(window):
+    counter = 0
+    status = "increasing"
+    for i in range(len(window)-1):
+        if(status == "increasing"):
+            if(i+1<i):
+                counter += 1
+            else:
+                status = "decreasing"
+        else:
+            if(i+1>i):
+                status = "increasing"
+    return counter
+
+def _compute_peak_features(window):
+    xArray = window[:,0]
+    yArray = window[:,1]
+    zArray = window[:,2]
+    xPeak = compute_crossing(xArray)
+    yPeak = compute_crossing(yArray)
+    zPeak = compute_crossing(zArray)
+    return np.array([[xPeak],[yPeak],[zPeak]])
 
 def extract_features(window):
     """
@@ -99,6 +124,7 @@ def extract_features(window):
     x = np.append(x,_compute_mean_crossing_features(window))
     x = np.append(x,_compute_FFT_features(window))
     x = np.append(x,_compute_mean_magnitude_singal(window))
-    _compute_entropy(window)
+    x = np.append(x,_compute_entropy(window))
+    x = np.append(x,_compute_peak_features(window))
 
     return x
