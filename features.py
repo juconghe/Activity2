@@ -59,7 +59,7 @@ def _compute_mean_crossing_features(window):
     zCrossingRate = compute_crossing(zArray-meanArray[2])
     return np.array([[xCrossingRate],[yCrossingRate],[zCrossingRate]])
 
-def _compute_magnitude_singal(window):
+def _compute_mean_magnitude_singal(window):
     return np.mean(np.sqrt(np.sum(np.square(window),axis=1)))
 
 def _compute_FFT_features(window):
@@ -72,6 +72,10 @@ def _compute_FFT_features(window):
     dominantY = freq[spY.argmax()]
     dominantZ = freq[spZ.argmax()]
     return np.array([[dominantX],[dominantY],[dominantZ]])
+
+def _compute_entropy(window):
+    resultArray = np.histogram(window)
+    print resultArray[0].shape
 
 def extract_features(window):
     """
@@ -94,6 +98,7 @@ def extract_features(window):
     x = np.append(x,_compute_zero_crossing_features(window))
     x = np.append(x,_compute_mean_crossing_features(window))
     x = np.append(x,_compute_FFT_features(window))
-    x = np.append(x,_compute_magnitude_singal(window))
+    x = np.append(x,_compute_mean_magnitude_singal(window))
+    _compute_entropy(window)
 
     return x
