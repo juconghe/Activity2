@@ -16,16 +16,11 @@ it is still publicly accessible).
 
 import numpy as np
 
-def extractColumn(column,window):
-    return window[:column]
-
-def compute_crossing(crossingValue,valueArray):
-    crossingCounter = 0
-    for i in range(len(valueArray)-1):
-        if((valueArray[i]>crossingValue && valueArray[i+1]<crossingValue)
-        || (valueArray[i]<crossingValue && valueArray[i+1]>crossingValue)):
-            crossingCounter += 1
-    return crossingCounter
+def compute_crossing(window):
+    list1 = np.sign(window[1:])
+    list2 = np.sign(window[:-1])
+    combineList = ((list1 - list2)!=0)
+    return np.sum(combineList)
 
 def _compute_mean_features(window):
     """
@@ -45,25 +40,31 @@ def _compute_max_features(window):
 def _compute_median_features(window):
     return np.median(window,axis=0)
 
+def _compute_magnitude_features(window):
+    return np.sqrt(np.sum(np.square(window),axis=1))
+
 def _compute_zero_crossing_features(window):
-    xArray = extractColumn(0,window)
-    yArray = extractColumn(1,window)
-    zArray = extractColumn(2,window)
-    xCrossingRate = compute_crossing(0,xArray)
-    yCrossingRate = compute_crossing(0,yArray)
-    zCrossingRate = compute_crossing(0,zArray)
-    return np.array([xCrossingRate,yCrossingRate,zCrossingRate])
+    xArray = window[:,0]
+    yArray = window[:,1]
+    zArray = window[:,2]
+    xCrossingRate = compute_crossing(xArray)
+    yCrossingRate = compute_crossing(yArray)
+    zCrossingRate = compute_crossing(zArray)
+    return np.array([[xCrossingRate],[yCrossingRate],[zCrossingRate]])
 
 def _compute_mean_crossing_features(window):
     meanArray = _compute_mean_features(window)
-    xArray = extractColumn(0,window)
-    yArray = extractColumn(1,window)
-    zArray = extractColumn(2,window)
-    xCrossingRate = compute_crossing(meanArray[0],xArray)
-    yCrossingRate = compute_crossing(meanArray[1],yArray)
-    zCrossingRate = compute_crossing(meanArray[2],zArray)
-    return np.array([xCrossingRate,yCrossingRate,zCrossingRate])
+    xArray = window[:,0]
+    yArray = window[:,1]
+    zArray = window[:,2]
+    xCrossingRate = compute_crossing(xArray-meanArray[0])
+    yCrossingRate = compute_crossing(yArray-meanArray[1])
+    zCrossingRate = compute_crossing(zArray-meanArray[2])
+    return np.array([[xCrossingRate],[yCrossingRate],[zCrossingRate]])
 
+def _compute_FFT_features(window):
+    n_freq = 32
+    sp = sp = np.fft.fft(window[:,0], n=n_freq)
 def extract_features(window):
     """
     Here is where you will extract your features from the data over
