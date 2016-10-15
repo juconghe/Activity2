@@ -159,6 +159,7 @@ for i, (train_indexes, test_indexes) in enumerate(cv):
 
 
     #TODO: Compute the accuracy, precision and recall from the confusion matrix
+    print("stats length is {}".format(len(stats)))
     print("accuracy is: {}".format(sum_output[0]))
     print("precision for walking : {}".format(sum_output[1]))
     print("precision for running : {}".format(sum_output[2]))

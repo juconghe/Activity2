@@ -40,9 +40,6 @@ def _compute_max_features(window):
 def _compute_median_features(window):
     return np.median(window,axis=0)
 
-def _compute_magnitude_features(window):
-    return np.sqrt(np.sum(np.square(window),axis=1))
-
 def _compute_zero_crossing_features(window):
     xArray = window[:,0]
     yArray = window[:,1]
@@ -62,9 +59,20 @@ def _compute_mean_crossing_features(window):
     zCrossingRate = compute_crossing(zArray-meanArray[2])
     return np.array([[xCrossingRate],[yCrossingRate],[zCrossingRate]])
 
+def _compute_magnitude_singal(window):
+    return np.mean(np.sqrt(np.sum(np.square(window),axis=1)))
+
 def _compute_FFT_features(window):
     n_freq = 32
-    sp = sp = np.fft.fft(window[:,0], n=n_freq)
+    freq = np.fft.fftfreq(n_freq)
+    spX = sp = np.fft.fft(window[:,0], n=n_freq).astype(float)
+    spY = sp = np.fft.fft(window[:,1], n=n_freq).astype(float)
+    spZ = sp = np.fft.fft(window[:,2], n=n_freq).astype(float)
+    dominantX = freq[spX.argmax()]
+    dominantY = freq[spY.argmax()]
+    dominantZ = freq[spZ.argmax()]
+    return np.array([[dominantX],[dominantY],[dominantZ]])
+
 def extract_features(window):
     """
     Here is where you will extract your features from the data over
@@ -85,5 +93,7 @@ def extract_features(window):
     x = np.append(x,_compute_median_features(window))
     x = np.append(x,_compute_zero_crossing_features(window))
     x = np.append(x,_compute_mean_crossing_features(window))
+    x = np.append(x,_compute_FFT_features(window))
+    x = np.append(x,_compute_magnitude_singal(window))
 
     return x
