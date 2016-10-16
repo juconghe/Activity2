@@ -146,14 +146,17 @@ n_classes = len(class_names)
 # TODO: Train and evaluate your decision tree classifier over 10-fold CV.
 # Report average accuracy, precision and recall metrics.
 tree  =   DecisionTreeClassifier ( criterion = "entropy" ,  max_depth = 3)
-tree.fit(X,y)
-y_pred = tree.predict(X)
-cof = confusion_matrix(X,y_pred)
-print(conf)
 cv = cross_validation.KFold(n, n_folds=10, shuffle=False, random_state=None)
-
 for i, (train_indexes, test_indexes) in enumerate(cv):
     print("Fold {}".format(i))
+    X_train = X[train_indexes, :]
+    y_train = y[train_indexes]
+    X_test = X[test_indexes, :]
+    y_test = y[test_indexes]
+    tree.fit(X_train, y_train)
+    y_pred = tree.predict(X_test)
+    conf = confusion_matrix(y_test,y_pred)
+    print(conf)
 
 # TODO: Evaluate another classifier, i.e. SVM, Logistic Regression, k-NN, etc.
 
