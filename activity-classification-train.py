@@ -130,7 +130,7 @@ sys.stdout.flush()
 plt.figure()
 formats = ['bo', 'go']
 for i in range(0,len(y),10): # only plot 1/10th of the points, it's a lot of data!
-    plt.plot(X[i,mapDic["Variance Y"]], X[i,mapDic["magnitude"]], formats[int(y[i])])
+    plt.plot(X[i,mapDic["zeroX"]], X[i,mapDic["PeakX"]], formats[int(y[i])])
 
 plt.show()
 

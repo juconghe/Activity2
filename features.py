@@ -97,9 +97,9 @@ def _compute_peak_features(window):
     xArray = window[:,0]
     yArray = window[:,1]
     zArray = window[:,2]
-    xPeak = compute_crossing(xArray)
-    yPeak = compute_crossing(yArray)
-    zPeak = compute_crossing(zArray)
+    xPeak = compute_peak(xArray)
+    yPeak = compute_peak(yArray)
+    zPeak = compute_peak(zArray)
     return np.array([[xPeak],[yPeak],[zPeak]])
 
 def extract_features(window):
