@@ -206,7 +206,7 @@ print("the average of recall is {}".format(np.mean(sum_recall)))
 
 # TODO: Evaluate another classifier, i.e. SVM, Logistic Regression, k-NN, etc.
 #SVM
-svc = svm.SVC(kernel = 'linear', C=1.0 )
+svc = svm.LinearSVC()
 for i, (train_indexes, test_indexes) in enumerate(cv):
         print("Fold {} : The confusion matrix is :".format(i))
         X_train = X[train_indexes, :]
