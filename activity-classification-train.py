@@ -38,6 +38,7 @@ from sklearn.metrics import confusion_matrix
 import pickle
 
 
+
 # %%---------------------------------------------------------------------------
 #
 #		                 Load Data From Disk
@@ -145,10 +146,10 @@ n_classes = len(class_names)
 
 # TODO: Train and evaluate your decision tree classifier over 10-fold CV.
 # Report average accuracy, precision and recall metrics.
-tree  =   DecisionTreeClassifier ( criterion = "entropy" ,  max_depth = 3)
+tree  =   DecisionTreeClassifier ( criterion = "peak_features" ,  max_depth = 3)
 cv = cross_validation.KFold(n, n_folds=10, shuffle=False, random_state=None)
 for i, (train_indexes, test_indexes) in enumerate(cv):
-    print("Fold {}".format(i))
+    print("Fold {} : The confusion matrix is :".format(i))
     X_train = X[train_indexes, :]
     y_train = y[train_indexes]
     X_test = X[test_indexes, :]
@@ -158,10 +159,115 @@ for i, (train_indexes, test_indexes) in enumerate(cv):
     conf = confusion_matrix(y_test,y_pred)
     print(conf)
 
+sum_accuracy = []
+sum_precision = []
+sum_recall = []
+accuracy = sum(np.diagonal(conf))/(np.sum(conf)*1.0)
+precision_walking = (conf[0,0]/(sum(conf[:, 0]*1.0)))
+precision_running = (conf[1,1]/(sum(conf[:, 1])*1.0))
+recall_walking = (conf[0,0]/(sum(conf[0])*1.0))
+recall_running = (conf[1,1]/(sum(conf[1])*1.0))
+sum_output = []
+
+sum_output.append(accuracy)
+sum_accuracy.append(accuracy)
+
+sum_output.append(precision_walking)
+sum_precision.append(precision_walking)
+sum_output.append(precision_running)
+sum_precision.append(precision_running)
+
+sum_output.append(recall_walking)
+sum_recall.append(recall_walking)
+sum_output.append(recall_running)
+sum_recall.append(recall_running)
+
+
+for index in range(len(sum_output)):
+        if np.isnan(sum_output[index]):
+            sum_output[index] = 0
+
+for index in range(len(sum_accuracy)):
+            if np.isnan(sum_accuracy[index]):
+                sum_accuracy[index] = 0
+
+for index in range(len(sum_precision)):
+            if np.isnan(sum_precision[index]):
+                sum_precision[index] = 0
+
+for index in range(len(sum_recall)):
+            if np.isnan(sum_recall[index]):
+                sum_recall[index] = 0
+
+print("the average of accuracy is {}".format(np.mean(sum_accuracy)))
+print("the average of precision is {}".format(np.mean(sum_precision)))
+print("the average of recall is {}".format(np.mean(sum_recall)))
+export_graphviz (tree ,  out_file = 'tree.dot' ,  feature_names  =  feature_names)
+
+
 # TODO: Evaluate another classifier, i.e. SVM, Logistic Regression, k-NN, etc.
+#SVM
+svc = svm.LinearSVC()
+cv = cross_validation.KFold(n, n_folds=10, shuffle=False, random_state=None)
+for i, (train_indexes, test_indexes) in enumerate(cv):
+        print("Fold {} : The confusion matrix is :".format(i))
+        X_train = X[train_indexes, :]
+        y_train = y[train_indexes]
+        X_test = X[test_indexes, :]
+        y_test = y[test_indexes]
+        svc.fit(X_train,y_train)
+        y_pred = svc.predict(X_test)
+        conf = confusion_matrix(y_test,y_pred)
+        print(conf)
+sum_accuracy = []
+sum_precision = []
+sum_recall = []
+accuracy = sum(np.diagonal(conf))/(np.sum(conf)*1.0)
+precision_walking = (conf[0,0]/(sum(conf[:, 0]*1.0)))
+precision_running = (conf[1,1]/(sum(conf[:, 1])*1.0))
+recall_walking = (conf[0,0]/(sum(conf[0])*1.0))
+recall_running = (conf[1,1]/(sum(conf[1])*1.0))
+sum_output = []
+
+sum_output.append(accuracy)
+sum_accuracy.append(accuracy)
+
+sum_output.append(precision_walking)
+sum_precision.append(precision_walking)
+sum_output.append(precision_running)
+sum_precision.append(precision_running)
+
+sum_output.append(recall_walking)
+sum_recall.append(recall_walking)
+sum_output.append(recall_running)
+sum_recall.append(recall_running)
+
+
+for index in range(len(sum_output)):
+        if np.isnan(sum_output[index]):
+            sum_output[index] = 0
+
+for index in range(len(sum_accuracy)):
+            if np.isnan(sum_accuracy[index]):
+                sum_accuracy[index] = 0
+
+for index in range(len(sum_precision)):
+            if np.isnan(sum_precision[index]):
+                sum_precision[index] = 0
+
+for index in range(len(sum_recall)):
+            if np.isnan(sum_recall[index]):
+                sum_recall[index] = 0
+
+print("the average of accuracy is {}".format(np.mean(sum_accuracy)))
+print("the average of precision is {}".format(np.mean(sum_precision)))
+print("the average of recall is {}".format(np.mean(sum_recall)))
 
 # TODO: Once you have collected data, train your best model on the entire
 # dataset. Then save it to disk as follows:
+
+svc.fit(X, y)
+# export_graphviz ( svc ,  out_file = 'svc.dot' ,  feature_names  =  feature_names)
 
 # when ready, set this to the best model you found, trained on all the data:
 best_classifier = None
