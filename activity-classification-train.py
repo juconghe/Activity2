@@ -146,7 +146,7 @@ n_classes = len(class_names)
 
 # TODO: Train and evaluate your decision tree classifier over 10-fold CV.
 # Report average accuracy, precision and recall metrics.
-tree  =   DecisionTreeClassifier ( criterion = "peak_features" ,  max_depth = 3)
+tree  =   DecisionTreeClassifier ( criterion = "entropy" ,  max_depth = 3)
 cv = cross_validation.KFold(n, n_folds=10, shuffle=False, random_state=None)
 for i, (train_indexes, test_indexes) in enumerate(cv):
     print("Fold {} : The confusion matrix is :".format(i))
@@ -266,7 +266,7 @@ print("the average of recall is {}".format(np.mean(sum_recall)))
 # TODO: Once you have collected data, train your best model on the entire
 # dataset. Then save it to disk as follows:
 
-svc.fit(X, y)
+tree.svc.fit(X, y)
 # export_graphviz ( svc ,  out_file = 'svc.dot' ,  feature_names  =  feature_names)
 
 # when ready, set this to the best model you found, trained on all the data:
