@@ -202,13 +202,11 @@ for index in range(len(sum_recall)):
 print("the average of accuracy is {}".format(np.mean(sum_accuracy)))
 print("the average of precision is {}".format(np.mean(sum_precision)))
 print("the average of recall is {}".format(np.mean(sum_recall)))
-export_graphviz (tree ,  out_file = 'tree.dot' ,  feature_names  =  feature_names)
 
 
 # TODO: Evaluate another classifier, i.e. SVM, Logistic Regression, k-NN, etc.
 #SVM
-svc = svm.LinearSVC()
-cv = cross_validation.KFold(n, n_folds=10, shuffle=False, random_state=None)
+svc = svm.SVC(kernel = 'linear', C=1.0 )
 for i, (train_indexes, test_indexes) in enumerate(cv):
         print("Fold {} : The confusion matrix is :".format(i))
         X_train = X[train_indexes, :]
@@ -265,9 +263,8 @@ print("the average of recall is {}".format(np.mean(sum_recall)))
 
 # TODO: Once you have collected data, train your best model on the entire
 # dataset. Then save it to disk as follows:
-
-tree.svc.fit(X, y)
-# export_graphviz ( svc ,  out_file = 'svc.dot' ,  feature_names  =  feature_names)
+tree.fit(X, y)
+export_graphviz (tree ,out_file = 'tree.dot' ,  feature_names  =  feature_names)
 
 # when ready, set this to the best model you found, trained on all the data:
 best_classifier = None
