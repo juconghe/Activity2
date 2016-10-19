@@ -147,7 +147,7 @@ n_classes = len(class_names)
 # TODO: Train and evaluate your decision tree classifier over 10-fold CV.
 # Report average accuracy, precision and recall metrics.
 tree  =   DecisionTreeClassifier ( criterion = "entropy" ,  max_depth = 3)
-cv = cross_validation.KFold(n, n_folds=10, shuffle=False, random_state=None)
+cv = cross_validation.KFold(n, n_folds=10, shuffle=True, random_state=None)
 for i, (train_indexes, test_indexes) in enumerate(cv):
     print("Fold {} : The confusion matrix is :".format(i))
     X_train = X[train_indexes, :]
@@ -215,6 +215,8 @@ for i, (train_indexes, test_indexes) in enumerate(cv):
         y_test = y[test_indexes]
         svc.fit(X_train,y_train)
         y_pred = svc.predict(X_test)
+        print(np.unique(y_test))
+        print(np.unique(y_pred))
         conf = confusion_matrix(y_test,y_pred)
         print(conf)
 sum_accuracy = []
