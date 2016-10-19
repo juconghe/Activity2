@@ -267,6 +267,6 @@ tree.fit(X, y)
 export_graphviz (tree ,out_file = 'tree.dot' ,  feature_names  =  feature_names)
 
 # when ready, set this to the best model you found, trained on all the data:
-best_classifier = None
+best_classifier = tree
 with open('classifier.pickle', 'wb') as f: # 'wb' stands for 'write bytes'
     pickle.dump(best_classifier, f)
