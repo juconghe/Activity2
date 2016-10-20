@@ -57,12 +57,16 @@ def predict(window):
     x = extract_features(window)
     activity = classifier.predict(x)
     if activity[0] == 0 :
+        onActivityDetected("Walking")
         print("Walking")
     if activity[0] == 1 :
+        onActivityDetected("Jumping")
         print("Jumping")
     if activity[0] == 2 :
+        onActivityDetected("Sitting")
         print("Sitting")
     if activity[0] == 3 :
+        onActivityDetected("Jogging")
         print("Jogging")
     return
 
