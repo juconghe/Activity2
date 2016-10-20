@@ -156,6 +156,7 @@ for i, (train_indexes, test_indexes) in enumerate(cv):
     y_test = y[test_indexes]
     tree.fit(X_train, y_train)
     y_pred = tree.predict(X_test)
+    print(y_pred)
     conf = confusion_matrix(y_test,y_pred)
     print(conf)
 
@@ -163,10 +164,14 @@ sum_accuracy = []
 sum_precision = []
 sum_recall = []
 accuracy = sum(np.diagonal(conf))/(np.sum(conf)*1.0)
-precision_walking = (conf[0,0]/(sum(conf[:, 0]*1.0)))
-precision_running = (conf[1,1]/(sum(conf[:, 1])*1.0))
-recall_walking = (conf[0,0]/(sum(conf[0])*1.0))
-recall_running = (conf[1,1]/(sum(conf[1])*1.0))
+precision_stationary= (conf[0,0]/(sum(conf[:, 0]*1.0)))
+print("Precision of Stationary is {}".format(precision_stationary))
+precision_walking = (conf[1,1]/(sum(conf[:, 1])*1.0))
+print("Precision of walking is {}".format(precision_walking))
+recall_stationary = (conf[0,0]/(sum(conf[0])*1.0))
+print("Recall of Stationary is {}".format(recall_stationary))
+recall_walking = (conf[1,1]/(sum(conf[1])*1.0))
+print("Recall of walking is {}".format(recall_walking))
 sum_output = []
 
 sum_output.append(accuracy)
@@ -174,13 +179,13 @@ sum_accuracy.append(accuracy)
 
 sum_output.append(precision_walking)
 sum_precision.append(precision_walking)
-sum_output.append(precision_running)
-sum_precision.append(precision_running)
+sum_output.append(precision_walking)
+sum_precision.append(precision_walking)
 
+sum_output.append(recall_stationary)
+sum_recall.append(recall_stationary)
 sum_output.append(recall_walking)
 sum_recall.append(recall_walking)
-sum_output.append(recall_running)
-sum_recall.append(recall_running)
 
 
 for index in range(len(sum_output)):
@@ -215,32 +220,33 @@ for i, (train_indexes, test_indexes) in enumerate(cv):
         y_test = y[test_indexes]
         svc.fit(X_train,y_train)
         y_pred = svc.predict(X_test)
-        print(np.unique(y_test))
-        print(np.unique(y_pred))
         conf = confusion_matrix(y_test,y_pred)
         print(conf)
 sum_accuracy = []
 sum_precision = []
 sum_recall = []
 accuracy = sum(np.diagonal(conf))/(np.sum(conf)*1.0)
-precision_walking = (conf[0,0]/(sum(conf[:, 0]*1.0)))
-precision_running = (conf[1,1]/(sum(conf[:, 1])*1.0))
-recall_walking = (conf[0,0]/(sum(conf[0])*1.0))
-recall_running = (conf[1,1]/(sum(conf[1])*1.0))
-sum_output = []
+precision_stationary= (conf[0,0]/(sum(conf[:, 0]*1.0)))
+print("Precision of Stationary is {}".format(precision_stationary))
+precision_walking = (conf[1,1]/(sum(conf[:, 1])*1.0))
+print("Precision of walking is {}".format(precision_walking))
+recall_stationary = (conf[0,0]/(sum(conf[0])*1.0))
+print("Recall of Stationary is {}".format(recall_stationary))
+recall_walking = (conf[1,1]/(sum(conf[1])*1.0))
+print("Recall of walking is {}".format(recall_walking))
 
 sum_output.append(accuracy)
 sum_accuracy.append(accuracy)
 
 sum_output.append(precision_walking)
 sum_precision.append(precision_walking)
-sum_output.append(precision_running)
-sum_precision.append(precision_running)
+sum_output.append(precision_walking)
+sum_precision.append(precision_walking)
 
+sum_output.append(recall_stationary)
+sum_recall.append(recall_stationary)
 sum_output.append(recall_walking)
 sum_recall.append(recall_walking)
-sum_output.append(recall_running)
-sum_recall.append(recall_running)
 
 
 for index in range(len(sum_output)):

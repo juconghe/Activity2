@@ -96,7 +96,6 @@ try:
     labelled_data = []
 
     while True:
-        print("getting data")
         try:
             message = receive_socket.recv(1024).strip()
             json_strings = message.split("\n")
@@ -117,16 +116,14 @@ try:
                     z = data['data']['z']
                     label = data['label']
                     print(label)
-                    # if label == 0 :
-                    #     print("Walking")
-                    # if label == 1 :
-                    #     print("Running")
-                    # if label == 2 :
-                    #     print("Jumping")
-                    # if label == 3 :
-                    #     print("Jogging")
-                    # label = {0:"Walking",1:"Running",2:"Jumping",3:"Jogging"}
-                    # print(label)
+                    if label == 0 :
+                        print("Walking")
+                    if label == 1 :
+                        print("Running")
+                    if label == 2 :
+                        print("Sitting")
+                    if label == 3 :
+                        print("Jogging")
                     labelled_data.append([t, x, y, z, label])
 
             sys.stdout.flush()

@@ -60,8 +60,9 @@ def predict(window):
 
     print("Buffer filled. Run your classifier.")
 
-    # TODO: Predict class label
-
+    activities = classifier.predict(window)
+    for activity in activities:
+        onActivityDetected(activity)
     return
 
 
