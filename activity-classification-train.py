@@ -47,7 +47,7 @@ import pickle
 
 print("Loading data...")
 sys.stdout.flush()
-data_file = os.path.join('data', 'activity-data.csv')
+data_file = os.path.join('my-activity-data.csv')
 data = np.genfromtxt(data_file, delimiter=',')
 print("Loaded {} raw labelled activity data samples.".format(len(data)))
 sys.stdout.flush()
@@ -91,7 +91,7 @@ feature_names = ["mean X", "mean Y", "mean Z",
                  "FFTX","FFTY","FFTZ",
                  "magnitude","entropy","PeakX",
                  "PeakY","PeakZ"]
-class_names = ["Stationary", "Walking"]
+class_names = ["Walking", "Jumping","Sitting","Jogging"]
 
 print("Extracting features and labels for window size {} and step size {}...".format(window_size, step_size))
 sys.stdout.flush()
@@ -109,7 +109,10 @@ for i,window_with_timestamp_and_label in slidingWindow(data, window_size, step_s
     # append features:
     X = np.append(X, np.reshape(x, (1,-1)), axis=0)
     # append label:
+    print(window_with_timestamp_and_label[10, -1])
     y = np.append(y, window_with_timestamp_and_label[10, -1])
+    print("Getting label")
+    print(np.shape(y))
 
 print("Finished feature extraction over {} windows".format(len(X)))
 print("Unique labels found: {}".format(set(y)))
@@ -124,16 +127,16 @@ sys.stdout.flush()
 # We provided you with an example of plotting two features.
 # We plotted the mean X acceleration against the mean Y acceleration.
 # It should be clear from the plot that these two features are alone very uninformative.
-print("Plotting data points...")
-lenghtArray = range(len(feature_names))
-mapDic = {feature_names[i]:i for i in lenghtArray}
-sys.stdout.flush()
-plt.figure()
-formats = ['bo', 'go']
-for i in range(0,len(y),10): # only plot 1/10th of the points, it's a lot of data!
-    plt.plot(X[i,mapDic["zeroX"]], X[i,mapDic["PeakX"]], formats[int(y[i])])
-
-plt.show()
+# print("Plotting data points...")
+# lenghtArray = range(len(feature_names))
+# mapDic = {feature_names[i]:i for i in lenghtArray}
+# sys.stdout.flush()
+# plt.figure()
+# formats = ['bo', 'go']
+# for i in range(0,len(y),10): # only plot 1/10th of the points, it's a lot of data!
+#     plt.plot(X[i,mapDic["zeroX"]], X[i,mapDic["PeakX"]], formats[int(y[i])])
+#
+# plt.show()
 
 # %%---------------------------------------------------------------------------
 #
@@ -155,8 +158,8 @@ for i, (train_indexes, test_indexes) in enumerate(cv):
     X_test = X[test_indexes, :]
     y_test = y[test_indexes]
     tree.fit(X_train, y_train)
+    print(X_test)
     y_pred = tree.predict(X_test)
-    print(y_pred)
     conf = confusion_matrix(y_test,y_pred)
     print(conf)
 
@@ -275,6 +278,6 @@ tree.fit(X, y)
 export_graphviz (tree ,out_file = 'tree.dot' ,  feature_names  =  feature_names)
 
 # when ready, set this to the best model you found, trained on all the data:
-best_classifier = tree
+best_classifier = svc
 with open('classifier.pickle', 'wb') as f: # 'wb' stands for 'write bytes'
     pickle.dump(best_classifier, f)

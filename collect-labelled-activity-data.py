@@ -119,7 +119,7 @@ try:
                     if label == 0 :
                         print("Walking")
                     if label == 1 :
-                        print("Running")
+                        print("Jumping")
                     if label == 2 :
                         print("Sitting")
                     if label == 3 :

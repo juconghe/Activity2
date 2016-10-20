@@ -19,12 +19,10 @@ import threading
 import numpy as np
 import pickle
 from features import extract_features # make sure features.py is in the same directory
-from util import reorient, reset_vars
+from util import reorient, reset_vars,slidingWindow
 
 # TODO: Replace the string with your user ID
 user_id = "e4.e9.a7.6e.0f.37.b9.ff.4a.47"
-
-count = 0
 
 '''
     This socket is used to send data back through the data collection server.
@@ -35,7 +33,6 @@ count = 0
 send_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 send_socket.connect(("none.cs.umass.edu", 9999))
 
-# Load the classifier:
 
 with open('classifier.pickle', 'rb') as f:
     classifier = pickle.load(f)
@@ -57,12 +54,16 @@ def predict(window):
     Android must use the same feature extraction that you used to
     train the model.
     """
-
-    print("Buffer filled. Run your classifier.")
-
-    activities = classifier.predict(window)
-    for activity in activities:
-        onActivityDetected(activity)
+    x = extract_features(window)
+    activity = classifier.predict(x)
+    if activity[0] == 0 :
+        print("Walking")
+    if activity[0] == 1 :
+        print("Jumping")
+    if activity[0] == 2 :
+        print("Sitting")
+    if activity[0] == 3 :
+        print("Jogging")
     return
 
 
@@ -160,8 +161,8 @@ try:
                     # make sure we have exactly window_size data points :
                     while len(sensor_data) > window_size:
                         sensor_data.pop(0)
-
                     if (index >= step_size and len(sensor_data) == window_size):
+                        print(np.shape(np.asarray(sensor_data[:])))
                         t = threading.Thread(target=predict, args=(np.asarray(sensor_data[:]),))
                         t.start()
                         index = 0
