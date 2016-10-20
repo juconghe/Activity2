@@ -1,0 +1,32 @@
+digraph Tree {
+node [shape=box] ;
+0 [label="Variance Z <= 0.4962\nentropy = 0.9049\nsamples = 14346\nvalue = [4597, 9749]"] ;
+1 [label="entropy <= -175.7766\nentropy = 0.2023\nsamples = 9463\nvalue = [299, 9164]"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="maxZ <= 9.6533\nentropy = 0.0939\nsamples = 7906\nvalue = [95, 7811]"] ;
+1 -> 2 ;
+3 [label="entropy = 0.3319\nsamples = 1145\nvalue = [70, 1075]"] ;
+2 -> 3 ;
+4 [label="entropy = 0.0352\nsamples = 6761\nvalue = [25, 6736]"] ;
+2 -> 4 ;
+5 [label="magnitude <= 10.4356\nentropy = 0.5602\nsamples = 1557\nvalue = [204, 1353]"] ;
+1 -> 5 ;
+6 [label="entropy = 0.4906\nsamples = 1487\nvalue = [159, 1328]"] ;
+5 -> 6 ;
+7 [label="entropy = 0.9403\nsamples = 70\nvalue = [45, 25]"] ;
+5 -> 7 ;
+8 [label="maxZ <= 12.109\nentropy = 0.5288\nsamples = 4883\nvalue = [4298, 585]"] ;
+0 -> 8 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+9 [label="FFTX <= -0.4844\nentropy = 0.9536\nsamples = 1380\nvalue = [864, 516]"] ;
+8 -> 9 ;
+10 [label="entropy = 0.7243\nsamples = 169\nvalue = [34, 135]"] ;
+9 -> 10 ;
+11 [label="entropy = 0.8984\nsamples = 1211\nvalue = [830, 381]"] ;
+9 -> 11 ;
+12 [label="maxZ <= 14.6298\nentropy = 0.1397\nsamples = 3503\nvalue = [3434, 69]"] ;
+8 -> 12 ;
+13 [label="entropy = 0.2594\nsamples = 1416\nvalue = [1354, 62]"] ;
+12 -> 13 ;
+14 [label="entropy = 0.0324\nsamples = 2087\nvalue = [2080, 7]"] ;
+12 -> 14 ;
+}
